@@ -229,7 +229,9 @@ Obtén la versión _tidy_ de este conjunto de datos usando `pivot_longer`.
 Consejo: puedes eliminar el prefijo `wk` de las semanas mediante el argumento `names_prefix`. Opcionalmente puedes crear una columna `date` a partir de `date.entered`, sumando las semanas transcurridas desde la fecha de entrada en lista.
 
 ```{r}
-raw %>% pivot_longer()
+library(lubridate)
+raw %>% pivot_longer(cols=starts_with("wk"),names_prefix = "wk",names_to = "week",values_to="rank")
+# %>%mutate(date=date.entered+weeks(as.numeric(week)-1))
 
 ```
 
@@ -253,6 +255,9 @@ Convierte el conjunto de datos TB en _tidy_ utilizando `gather` y `separate`.
 
 ```{r}
 
+raw %>%gather(,3:ncol(raw)) %>% separate(sep=1,)
+
+gather(pew_religion,income,freq,2:11) %>% mutate(income=as.factor(income))
 ```
 
 
