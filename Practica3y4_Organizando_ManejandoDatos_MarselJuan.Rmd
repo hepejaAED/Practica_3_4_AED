@@ -255,9 +255,8 @@ Convierte el conjunto de datos TB en _tidy_ utilizando `gather` y `separate`.
 
 ```{r}
 
-raw %>%gather(,3:ncol(raw)) %>% separate(sep=1,)
+raw %>%gather(sex,value=cases,3:ncol(raw)) %>% separate(sep=1,col=sex,c("sex","age"))
 
-gather(pew_religion,income,freq,2:11) %>% mutate(income=as.factor(income))
 ```
 
 
