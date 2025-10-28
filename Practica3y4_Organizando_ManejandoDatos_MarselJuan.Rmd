@@ -325,7 +325,8 @@ load("./data/VuelosNY.Rdata")
 Muestra las primeras muestras de ambos data frames para hacerte una idea de las variables que contienen. ¿Qué diferencia existe entre la información mostrada en ambos data frames?
 
 ```{r }
-
+head(flights)
+head(planes)
 ```
 
 ### Ejercicio 6
@@ -335,7 +336,8 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 * Nota: Revisar el uso de la función filter vista en clase y tener en cuenta los operadores de comparación: igual ==, distinto !=, mayor >, mayor o igual >=, menor <, menor o igual <=.
 
 ```{r }
-
+planes.f<-planes %>% filter(!str_detect(str_to_lower(manufacturer),".*douglas.*")) %>%
+  filter(between(seats,90,210)) %>% mutate(manufacturer=ifelse(str_detect(str_to_lower(manufacturer),".*airbus*"),"AIRBUS COMP",manufacturer))
 
 
 ```
@@ -347,6 +349,7 @@ Crea un data frame denominado `flights.f` que contenga los vuelos que involucren
 
 ```{r }
 
+flights.f<-flights %>% inner_join(planes.f %>% select(tailnum),by="tailnum") 
 
 ```
 
@@ -355,6 +358,10 @@ Crea un data frame denominado `flights.f` que contenga los vuelos que involucren
 Reasigna los nombres de los data frames `planes.f` y `flights.f` a los nombres originales  `planes` y `flights`.
 
 ```{r }
+
+planes<-planes.f
+flights<-flights.f
+
 
 ```
 
@@ -368,6 +375,8 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 
 ```{r }
 
+flights<-flights %>% select(-time_hour,-starts_with("time"))
+
 ```
 
 ### Ejercicio 10
@@ -377,6 +386,7 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 ```{r }
 
 
+
 ```
 
 ### Ejercicio 11
@@ -384,6 +394,8 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame donde se calcule el número de vuelos (`Num_flights`), la distancia media recorrida (`Mean_distance`) y la distancia total recorrida (`Total_distance`) para cada uno de los aviones (`tailnum`) presentes en el conjunto `flights`. Descarta aquellos registros del data frame en los que la variable `tailnum` tenga un valor NA. Utiliza el operador pipe para enlazar las funciones. Almacena el data frame en una variable denominada `Distances_plane`.  
 
 ```{r }
+
+agregado<-flights %>% group_by(tailnum) %>% summarise(Num_flights=n(),Mean_distance=mean(distance), Total_distance=sum(distance))
 
 ```
 
