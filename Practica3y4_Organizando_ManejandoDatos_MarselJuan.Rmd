@@ -339,7 +339,6 @@ En nuestro estudio queremos aplicar una serie de criterios de exclusión sobre l
 planes.f<-planes %>% filter(!str_detect(str_to_lower(manufacturer),".*douglas.*")) %>%
   filter(between(seats,90,210)) %>% mutate(manufacturer=ifelse(str_detect(str_to_lower(manufacturer),".*airbus*"),"AIRBUS COMP",manufacturer))
 
-
 ```
 
 
@@ -375,8 +374,8 @@ Existen variables que, a priori, no tienen demasiado interés para el estudio qu
 
 ```{r }
 
-flights<-flights %>% select(-time_hour,-starts_with("time"))
-
+# flights<-flights %>% select(-time_hour,-starts_with("time"))
+planes<-planes %>% select(-speed,-type)
 ```
 
 ### Ejercicio 10
@@ -385,6 +384,7 @@ Incorpora una nueva variable a `flights` denominado `Full_Date` que sea de tipo 
 
 ```{r }
 
+flights<-flights %>% unite(Full_Date,day,month,year,sep="-") %>% mutate(Full_Date=as.Date(Full_Date))
 
 
 ```
@@ -395,7 +395,7 @@ Utilizando las funciones `group_by`, `summarise` y `filter`, crea un data frame 
 
 ```{r }
 
-agregado<-flights %>% group_by(tailnum) %>% summarise(Num_flights=n(),Mean_distance=mean(distance), Total_distance=sum(distance))
+agregado<-flights %>% group_by(tailnum) %>% summarise(Num_flights=n(),Mean_distance=mean(distance), Total_distance=sum(distance)) %>% drop_na()
 
 ```
 
