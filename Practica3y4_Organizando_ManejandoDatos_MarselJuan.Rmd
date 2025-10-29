@@ -414,9 +414,18 @@ Separa los datos _tidy_ que teníamos en el ejercicio 2 en dos tablas (data fram
 Opcionalmente se puede crear un identificador, `id`, asociado al nombre de la canción (`track`), y en la tabla de ranking solo usaremos este identificador en lugar del nombre de la canción.
 
 ```{r}
+rm(list = ls())
+```
 
 
+```{r}
+library(tidyr)
+load('data/Billboard.Rdata')
 
+df<-raw %>% pivot_longer(cols=starts_with("wk"),names_prefix = "wk",names_to = "week",values_to="rank") %>%  drop_na(rank)
+
+songs<-df %>% select(artist,track,time) %>% mutate(id=row_number())
+ranking<-df %>% select(date.entered,week,rank)
 ```
 
 ## TidyR. Una única unidad de observación almacenada en varias tablas
@@ -436,8 +445,19 @@ Esto se puede hacer fácilmente con las librerías `plyr` y `dplyr`.
 En la librería _tidyr_ hay varios conjuntos de datos. **table1** es un conjunto _tidy_ pero **table5** no lo es. Realiza las operaciones necesarias para obtener **table1** a partir de **table5**. También deben coincidir los tipos de datos de las columnas. 
 
 ```{r}
+rm(list=ls())
+```
 
 
+```{r}
+library(tidyverse)
+table5 %>% unite("year",century,year,sep="") %>% separate(sep="/",rate,into=c("cases","population")) %>%   mutate(
+    year = as.numeric(year),
+    cases = as.numeric(cases),
+    population = as.numeric(population)
+  )
+
+table1 
 ```
 
 ## DPLYR
